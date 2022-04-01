@@ -5,11 +5,11 @@
 4. Подождите, пока проект загрузится.
 5. В «Build Variants» выберите «stage» или «release».
 
-## Интеграция SDK
-В вашем build.gradle, добавьте репозиторий Maven sdk-android в список репозиториев  не реализовано
+## Требования
+
 ```gradle
-repositories {
-    maven { url 'https://maven.sdk-android.com' }
+defaultConfig {
+    minSdkVersion 21
 }
 ```
 
