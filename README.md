@@ -25,18 +25,18 @@ defaultConfig {
  ```
  implementation project(':wallet-debug')
  ```
-Так же для корректной работы SDK необходимо добавить следующие зависимости: 
+Так же для корректной работы SDK необходимо добавить следующие зависимости:
 
 ```
 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1'
- 
+
 implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 implementation 'com.google.code.gson:gson:2.8.7'
 implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
- 
+
 implementation("org.bouncycastle:bcprov-jdk15on:1.65")
 implementation("org.bouncycastle:bcpkix-jdk15on:1.65")
 ```
@@ -50,10 +50,10 @@ implementation project(':wallet-debug-rx')
 ```
 implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.21'
 implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.1'
- 
+
 implementation("com.squareup.okhttp3:okhttp:4.9.1")
 api("com.squareup.okhttp3:logging-interceptor:4.9.1")
- 
+
 implementation("org.bouncycastle:bcprov-jdk15on:1.65")
 implementation("org.bouncycastle:bcpkix-jdk15on:1.64")
 ```
@@ -67,10 +67,10 @@ Wallet(context)
 ```
 
 ### Авторизация пользователя в системе KD Pay
-Авторизация пользователя проходит в два этапа, для этого необходимо запросить у пользователя номер телефона (обязательное поле, на этот номер будет создан кошелёк), дополнительный номер телефона (необязательное), имя (необязательное), идентификатор устройства (если не передать, СДК попытается подставить автоматически) и идентификатор карты лояльности (необязательный). После чего указанные данные передаются в метод `login(phone, basePhone, name, uid, loyaltyId)`. Сервер в ответ на запрос посылает на номер пользователя шестизначный код, который вместе с `fcm` токеном нужно передать в метод `confirmCode(code, fcmToken)`. При успешном ответе от сервера sdk сохраняет в кеше необходимые данные (публичный ключ сервера, идентификаторы сессии и пользователя). После чего пользователь считается авторизованным 
+Авторизация пользователя проходит в два этапа, для этого необходимо запросить у пользователя номер телефона (обязательное поле, на этот номер будет создан кошелёк), дополнительный номер телефона (необязательное), имя (необязательное), идентификатор устройства (если не передать, СДК попытается подставить автоматически) и идентификатор карты лояльности (необязательный). После чего указанные данные передаются в метод `login(phone, basePhone, name, uid, loyaltyId)`. Сервер в ответ на запрос посылает на номер пользователя шестизначный код, который вместе с `fcm` токеном нужно передать в метод `confirmCode(code, fcmToken)`. При успешном ответе от сервера sdk сохраняет в кеше необходимые данные (публичный ключ сервера, идентификаторы сессии и пользователя). После чего пользователь считается авторизованным
 
 ```
-fun login(phone: String, userBasePhone: String?, name: String?, uid: String?, loyaltyId: String?) {  
+fun login(phone: String, userBasePhone: String?, name: String?, uid: String?, loyaltyId: String?) {
     lifecycleScope.launch {
         try {
             wallet.login(phone, userBasePhone, name, uid, loyaltyId)
@@ -79,14 +79,14 @@ fun login(phone: String, userBasePhone: String?, name: String?, uid: String?, lo
         }
     }
 }
- 
-fun confirm(smsCode: String, fcmToken: String) {  
-    lifecycleScope.launch {  
+
+fun confirm(smsCode: String, fcmToken: String) {
+    lifecycleScope.launch {
         try {
             wallet.confirmCode(smsCode, fcmToken)
         } catch(e: Exception) {
             Log.d(e)
-        }  
+        }
     }
 }
 ```
@@ -98,7 +98,7 @@ fun confirm(smsCode: String, fcmToken: String) {
 Получение аккаунта осуществляется с помощью метода `getAccount(cached)`. Для успешного получения состояния кошелька пользователь должен быть авторизован. Если клиент не авторизован в системе метод выбрасывает исключение. При отсутствии аккаунта в ответе поле `walletAccountState` будет иметь значение `NONE`.
 ```
 fun getAccount() {
-    lifecycleScope.launch {  
+    lifecycleScope.launch {
         val result = try {
             wallet.getAccount(false)
         } catch(e: Exception) {
@@ -108,15 +108,15 @@ fun getAccount() {
             Log.d(e)
             null
         }
- 
+
         if(result?.walletAccountState == WalletAccountState.NONE) {
             processAccountNotExists()
         }
- 
+
         if(result?.walletAccountState == WalletAccountState.READY) {
             processSucess(result)
         }
-       
+
     }
 }
 ```
@@ -127,22 +127,22 @@ fun getAccount() {
 ```
 fun selectBanksExample() {
     lifecycleScope.launch {
-        val banks = try {    
+        val banks = try {
             wallet.getBanks()
         } catch(e: Exception) {
             Log.d(e)
             null
         }
- 
+
         banks?.let {
             showBanksList(banks = it, onBankSelected = { bankId ->
-                try {      
+                try {
                     wallet.addNewBank(bankId)
                 } catch (e: Exception) {
                     Log.d(e)
                     showBankBindingError(e)
                 }
-             
+
         })
     }
 }
@@ -154,18 +154,18 @@ fun selectBanksExample() {
 ```
 fun checkBindingStatus(cachedBankId: Int) {
     lifecycleScope.launch {
-        val result = try {    
+        val result = try {
             wallet.getAccount(false)
         } catch(e: Exception) {
             Log.d(e)
             null
         }
- 
+
        result?.let {
             val boundBank = result.walletAccount.banks.firstOrNull { it.id == cachedBankId }
             boundBank?.let {
                 if(it.isLinked == true) showSuccessPopup() else showPendingPopup()
-            } ?: showErrorPopup()          
+            } ?: showErrorPopup()
         }
     }
 }
@@ -183,13 +183,13 @@ fun setDefaultBank() {
             Log.d(e)
             null
         }
- 
+
        result?.let {
             val boundBanks = result.walletAccount.banks
             showSelectDefaultBankDialog(boundBanks = boundBanks, onBankSelected = { selectedBankId: Int ->
                 val modifiedBanks = wallet.setDefaultBank(selectedBankId)
                 setNewBanks(modifiedBanks)
-            })     
+            })
         }
     }
 }
@@ -211,16 +211,16 @@ fun preloadOtp() {
         }
     }
 }
- 
+
 fun generateQrString(loyaltyId: String) {
     lifecycleScope.launch {
         val qrString = try {
             wallet.generateQrString(loyaltyId)
         } catch(e: Exception) {
-            Log.d(e)   
+            Log.d(e)
             null
         }
-         
+
         qrString?.let { renderQrCode(it) }
     }
 }
@@ -234,7 +234,7 @@ fun generateQrString(loyaltyId: String) {
 *Примечание: количество полей и их состав сервер может поменять на своей стороне, форма является динамической.*
 
 ```
-fun getFormFields(type: String, formId: Int?, formStatus: FormStatus) {  
+fun getFormFields(type: String, formId: Int?, formStatus: FormStatus) {
     lifecycleScope.launch {
         try {
             wallet.getFormFields(type, formId, formStatus)
@@ -253,7 +253,7 @@ fun getFormFields(type: String, formId: Int?, formStatus: FormStatus) {
 При `sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<Int, String>)` SDK уберет пустые поля из запроса, чтобы не заваливать пользователя ошибками на пустых полях.
 
 ```
-fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<Int, String>) {  
+fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<Int, String>) {
     lifecycleScope.launch {
         try {
             wallet.sendFormDraft(type, formId, version, draftFields)
@@ -271,7 +271,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 При `sendFormCommit(type: String, formId: Int?, version: Int?, draftFields: Map<Int, String>)` сервер отправит **все** поля, даже пустые, чтобы уведомить пользователя о незаполненных полях.
 
 ```
-fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<Int, String>) {  
+fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<Int, String>) {
     lifecycleScope.launch {
         try {
             wallet.sendFormDraft(type, formId, version, draftFields)
@@ -289,7 +289,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 # Методы
 
 ##### Метод для проверки состояния сервиса.
-`ping()` 
+`ping()`
 
 ##### Метод устанавливает идентификатор магазина.
 `configure(buyerId: String)`
@@ -303,8 +303,8 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | UserInfo      | Нет       | Возвращает userId пользователя, если такой имеется |
 
 
-##### Проверка доступа к кошелькам.
-`getUserExperiment(phone: String, applicationVersion: String, deviceId: String?, loyaltyId: String): UserExperiments`
+##### Проверка доступа к кошелькам. Имеет кеширование на 1 час.
+`getUserExperiment(phone: String, applicationVersion: String, deviceId: String?, loyaltyId: String, cacheInterval: Long): UserExperiments`
 
 **Параметры**
 | Имя      | Тип | Опциональный |Описание|
@@ -313,6 +313,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | applicationVersion | String| нет | Версия приложения |
 | deviceId | String| да | Идентификатор пользователя в системе.  Если не указан используется 64-битное число (выраженное в виде шестнадцатеричной строки), уникальное для каждой комбинации ключа подписи приложения, пользователя и устройства.  |
 | loyaltyId | String| нет | номер карты лояльности |
+| cacheInterval| Long| да | Интервал проверки кэша в секундах. Если не выставлен интервал, то кеш не используется. |
 
 **Возвращает**
 | Тип      | Опциональный | Описание |
@@ -861,4 +862,3 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | actualDescription | String | да | Описание актуальной версии |
 | currentDescription | String | да | Описание текущей версии |
 | storeLink | String | да | Ссылка на магазин для обновления версии мобильного приложения |
-
