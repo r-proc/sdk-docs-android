@@ -303,7 +303,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | UserInfo      | Нет       | Возвращает userId пользователя, если такой имеется |
 
 
-##### Проверка доступа к кошелькам. Имеет кеширование на 1 час.
+##### Проверка доступа к кошелькам. Имеет кеширование.
 `getUserExperiment(phone: String, applicationVersion: String, deviceId: String?, loyaltyId: String, cacheInterval: Long): UserExperiments`
 
 **Параметры**
