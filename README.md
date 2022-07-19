@@ -304,7 +304,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 
 
 ##### Проверка доступа к кошелькам. Имеет кеширование. Возвращает результат предыдущего запроса, параллельно выполняя новый запрос. Если интервал не задан, кеш считается валидным 1 час.
-`getUserExperiment(phone: String, applicationVersion: String, deviceId: String?, loyaltyId: String, cacheInterval: Long): UserExperiments`
+`getUserExperiment(phone: String, applicationVersion: String, deviceId: String?, loyaltyId: String, cacheInterval: Long): List<String>`
 
 **Параметры**
 | Имя      | Тип | Опциональный |Описание|
@@ -313,12 +313,12 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | applicationVersion | String| нет | Версия приложения |
 | deviceId | String| да | Идентификатор пользователя в системе.  Если не указан используется 64-битное число (выраженное в виде шестнадцатеричной строки), уникальное для каждой комбинации ключа подписи приложения, пользователя и устройства.  |
 | loyaltyId | String| нет | номер карты лояльности |
-| cacheInterval| Long| да | Интервал проверки кэша в секундах. Если не выставлен интервал, то кеш не используется. |
+| cacheInterval| Long| да | Интервал проверки кэша в секундах. Если не выставлен интервал, то кеш на 1 час. |
 
 **Возвращает**
 | Тип      | Опциональный | Описание |
 | ----------- | ----------- | ----------- |
-| UserExperiments      | Нет       | Вернет значение разрешены кошельки или нет для данного пользователя в зависимости от параметра BASE_FLOW|
+| List<String>      | Нет       | Вернет список экспериментов для данного пользователя|
 
 ##### Проверяет авторизован ли пользователь в системе по таким признакам как наличие в кеше идентификатора сессии и пользователя. А так же наличию публичного ключа сервера.
 `isAuthorized(): Boolean`
@@ -609,7 +609,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | VersionResult | нет| Возвращает результат проверки. При любой ошибке возвращает VersionResult.UNKNOWN |
 
 
-##### Полная очистка кеша sdk. Удаляются идентификаторы сессии, пользователя, публичный ключ сервера, отп коды и номер телефона пользователя.
+##### Полная очистка кеша sdk. Удаляются идентификаторы сессии, пользователя, публичный ключ сервера, отп коды и номер телефона пользователя. Параллельно на сервер отправляется запрос на сброс всех активных сессий.
 `logout()`
 
 
@@ -771,6 +771,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | mask | String | да | Маская для поля |
 | minLength | Int | да | Минимальное количество символов |
 | maxLength | Int | да | Максимальное количество символов |
+| nextFieldId | Int | да | Идентификатор следующего поля |
 | hideSymbols | Boolean | нет | Скрывать символы. По умолчанию false |
 
 #### `EditTextInputType  ` enum
@@ -811,20 +812,6 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | ----------- | ----------- |
 | Error | В форме имеются поля, не прошедшие валидацию |
 | Ok | Все поля в черновике валидны |
-
-
-
-#### sealed `UserExperiments`
-| Имя свойства |Описание|
-| ----------- |--------|
-| object `Normal` | Кошельки доступны |
-| NotAvailable | Кошельки недоступны |
-
-#### `NotAvailable`: UserExperiments
-| Имя свойства | Тип | Опциональный |Описание|
-| ----------- | ----------- | ----------- |--------|
-| hasQrCodes | Boolean | нет | Имеется ли Qr-код |
-
 
 #### sealed `UserInfo`
 | Имя свойства |Описание|
