@@ -595,7 +595,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | ErrorMessage.Client.NoAccount() | Нет аккаунта пользователя |
 
 
-##### Метод проверки версии бибоиотеки
+##### Метод проверки версии бибоиотеки. Имеет кеширование. Возвращает результат предыдущего запроса, параллельно выполняя новый запрос.
 `checkLibraryVersion(cacheInterval: Long = 0L): VersionResult`
 **Параметры**
 
