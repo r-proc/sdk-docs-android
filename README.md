@@ -620,6 +620,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | ----------- | ----------- | ----------- |--------|
 | walletAccountState | WalletAccountState | нет | Описывает состояние аккаунта |
 | walletAccount | WalletAccount | да | Модель данных кошелька |
+| messages | MessagesResponse | нет  | Информационное сообщение о работе сервера |
 
 
 #### `WalletAccountState` enum
@@ -639,7 +640,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | currency | String | нет | Строковый код валюты |
 | status | WalletStatus | нет (Undefined по умолчанию) | Состояние кошелька |
 | banks | List<Bank> | нет  | 	Список привязанных к кошельку банков |
-| forms | List<FormAccount> | нет  | Список форм для упрощенной идентификации |
+| forms | List<FormsResponse> | да  | Список форм для упрощенной идентификации |
 
 
 #### `WalletStatus ` enum
@@ -659,7 +660,18 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 | imageLink | String | да | Ссылка на логотип банка  |
 | isLinked | Boolean | нет (false по умолчанию) | Состояние привязки банка. Если банк присутствует в списке, но его статус isLinked == false, это означает что банк в процессе привязки.   |
 | isDefault | Boolean | нет (false по умолчанию) | Банк выбран основным. С счета этого банка будут сниматься средства при платежах кошельком.  |
+| isRetryPossible | Boolean | нет (false по умолчанию) | Возможность отправить запрос на привязку заново. |
 
+#### `MessagesAccount`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| badStatus | BadStatusResponse | да | Сообщение о нестабильности сервера  |
+
+#### `BadStatusServer`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| title | String | нет | Заголовок сообщения  |
+| description | BadStatusResponse | нет | Описание сообщения |
 
 #### `FormAccount`
 | Имя свойства | Тип | Опциональный |Описание|
