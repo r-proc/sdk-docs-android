@@ -835,6 +835,7 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 | isLinked | Boolean | нет (false по умолчанию) | Состояние привязки банка. Если банк присутствует в списке, но его статус isLinked == false, это означает что банк в процессе привязки.   |
 | isDefault | Boolean | нет (false по умолчанию) | Банк выбран основным. С счета этого банка будут сниматься средства при платежах кошельком.  |
 | isRetryPossible | Boolean | нет (false по умолчанию) | Возможность отправить запрос на привязку заново. |
+| instructionUrl | String | да | Ссылка на инструкцию по привязке |
 
 #### `MessagesAccount`
 | Имя свойства | Тип | Опциональный |Описание|
