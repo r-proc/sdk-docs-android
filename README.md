@@ -461,13 +461,14 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 
 
 ##### Получение аккаунта пользователя в системе KD Pay.
-`getAccount(cached, referrerId): WalletAccountResult`
+`getAccount(cached, referrerId, variant): WalletAccountResult`
 
 **Параметры**
 | Имя      | Тип | Опциональный |Описание|
 | ----------- | ----------- | ----------- |--------|
 | cached| Boolean| нет | Флаг для определения откуда брать данные аккаунта. true - из кеша, false - из сервера с последующим кешированием.|
 | referrerId| String| да | Идентификатор реферальной системы |
+| variant| String| да | Короткий вариант получения данных. Если указан `short`, то будут получены только основные данные по аккаунту. |
 
 
 **Возвращает**
@@ -513,6 +514,20 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 | ErrorMessage.Client.Authorization() | Отсутствует идентификатор пользователя в системе. Необходима авторизация.  |
 | ErrorMessage.Client.NoAccount() | Нет аккаунта пользователя |
 
+##### Метод для удаления привязанного банка
+`deleteBank(bankId: Int)`
+**Параметры**
+
+| Имя      | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| bankId| Int| нет |Идентификатор банка в системе KD Pay, выбранных из списка банков получаемых с помощью метода getBanks()|
+
+**Исключения**
+| Тип      |  Описание |
+| ----------- |  ----------- |
+| ErrorMessage.Client.NotAuthorized() | Сессия отсутствует или устарела |
+| ErrorMessage.Client.Authorization() | Отсутствует идентификатор пользователя в системе. Необходима авторизация.  |
+| ErrorMessage.Client.NoAccount() | Нет аккаунта пользователя |
 
 ##### Метод для установки банка по умолчанию. Выбирается из списка привязанных банков.
 `setDefaultBank(bankId: Int): List<Bank>`
@@ -840,13 +855,21 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 #### `MessagesAccount`
 | Имя свойства | Тип | Опциональный |Описание|
 | ----------- | ----------- | ----------- |--------|
-| badStatus | BadStatusResponse | да | Сообщение о нестабильности сервера  |
+| badStatus | BadStatusServer | да | Сообщение о нестабильности сервера  |
+| badTime | BadTime | да | Сообщение о некорректных настройках даты, времени и часового пояса  |
 
 #### `BadStatusServer`
 | Имя свойства | Тип | Опциональный |Описание|
 | ----------- | ----------- | ----------- |--------|
 | title | String | нет | Заголовок сообщения  |
 | description | BadStatusResponse | нет | Описание сообщения |
+
+#### `BadTime`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| title | String | да | Заголовок сообщения  |
+| text | String | нет | Описание сообщения |
+| button | String | нет | Текст для кнопки |
 
 #### `FormAccount`
 | Имя свойства | Тип | Опциональный |Описание|
