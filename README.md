@@ -9,7 +9,7 @@
 
 ```gradle
 defaultConfig {
-    minSdkVersion 21
+    minSdkVersion 24
 }
 ```
 
@@ -685,11 +685,11 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 | VersionResult | нет| Возвращает результат проверки. При любой ошибке возвращает VersionResult.UNKNOWN |
 
 
- /**
-     * уведомляет сервер о показанных оповещениях ползьзователю
-     * @param shownSnacks id и timestamp показанного оповещения
-     * @return список id оповений с актуальным статусом
-     */
+/**
+* уведомляет сервер о показанных оповещениях ползьзователю
+* @param shownSnacks id и timestamp показанного оповещения
+* @return список id оповений с актуальным статусом
+*/
 
 ##### Уведомляет сервер о показанных оповещениях ползьзователю. Возвращает список id оповений с актуальным статусом
 `notifySnacksShown(shownSnacks: Map<Int, Long>): List<SnacksShownStatus>`
@@ -706,14 +706,14 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 
 #### Получение списка операций для пользователя. Возвращает курсор на предыдущий/следующий набор операций, если такие имеются.
 `getOperations(cursor: String? = null,
-        type: OperationElement.OperationType? = null,
-        partner: String? = null,
-        datetimeStart: String? = null,
-        datetimeFinish: String? = null,
-        status: OperationElement.Status? = null
-    ): Operations`
- **Параметры**
- | Имя      | Тип | Опциональный |Описание|
+type: OperationElement.OperationType? = null,
+partner: String? = null,
+datetimeStart: String? = null,
+datetimeFinish: String? = null,
+status: OperationElement.Status? = null
+): Operations`
+**Параметры**
+| Имя      | Тип | Опциональный |Описание|
 | ----------- | ----------- | ----------- |--------|
 | cursor | String | да | указатель на получение списка операций |
 | type | OperationElement.OperationType | да | тип операции |
@@ -730,8 +730,8 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 
 #### Получение операции для пользователя
 `getOperation(id: Int, type: OperationElement.OperationType): OperationElement`
- **Параметры**
- | Имя      | Тип | Опциональный |Описание|
+**Параметры**
+| Имя      | Тип | Опциональный |Описание|
 | ----------- | ----------- | ----------- |--------|
 | id | String | нет | идентификатор операции |
 | type | OperationElement.OperationType | нет | тип операции |
@@ -740,6 +740,34 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 | Тип      | Опциональный | Описание |
 | ----------- | ----------- | ----------- |
 | OperationElement | нет| Элемент операции |
+
+#### Получение информации о кешбеке. Имеет перегрузку метода с параметром ключ-значения для гибкой настройки параметров.
+`getCashbackInfo(prevMonth: Int, scenario: String, collapsed: Boolean, source: String): OperationElement`
+**Параметры**
+| Имя      | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| prevMonth | Int | нет | период запроса данных |
+| scenario | String | нет | место запроса данных |
+| collapsed | Boolean | нет | скрытие виджетов в разделе |
+| source | String | нет | источник перехода |
+
+**Возвращает**
+| Тип      | Опциональный | Описание |
+| ----------- | ----------- | ----------- |
+| CashbackInfo | нет| Информацию о кешбеке |
+
+####Перегрузка метода информации о кешбеке
+`getCashbackInfo(parameters: Map<String, String>): OperationElement`
+
+**Параметры**
+| Имя      | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| parameters | Map<String, String> | нет | параметры в формате ключ-значение |
+
+**Возвращает**
+| Тип      | Опциональный | Описание |
+| ----------- | ----------- | ----------- |
+| CashbackInfo | нет| Информацию о кешбеке |
 
 
 ##### Полная очистка кеша sdk. Удаляются идентификаторы сессии, пользователя, публичный ключ сервера, отп коды и номер телефона пользователя. Параллельно на сервер отправляется запрос на сброс всех активных сессий.
@@ -1144,3 +1172,64 @@ fun getOperation(id: Int, type: OperationElement.OperationType,) {
 | ----------- | ----------- | ----------- |--------|
 | name | String | нет | Торговец операции |
 | description | String | да | Описание торговца |
+
+#### `CashbackInfo`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| collapsed | Boolean | да | скрытие виджетов в разделе |
+| widgets | List<Widget> | да | список виджетов |
+
+#### `Widget`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| name | String | нет | имя |
+| id | Int | нет | идентификатор |
+| collapsable | Boolean | нет | идентификатор |
+| params | List<Param> | да | параметры |
+| items | List<Item | да | элементы |
+| left | Left | да | левый элемент |
+| right | Right | да | правый элемент |
+| text | String | да | текст |
+| sum | String | да | сума |
+| currency | String | да | валюта |
+| pointerDirection | String | да | направление |
+| currentMonth | Int | да | текущий месяц |
+| onClick | Action | да | действие по нажатию |
+
+#### `Param`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| name | String | да | имя |
+| type | String | да | тип |
+| value | String | да | значение |
+| currency | String | да | валюта |
+| fontColor | String | да | цвет текста |
+| onClick | Action | да | действие по нажатию |
+
+#### `Item`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| prefix | String | да | префикс |
+| sum | String | да | сумма |
+| currency | String | да | валюта |
+| cashback | String | да | кешбек |
+| fullness | Int | да | заполненность |
+
+#### `Left`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| sum | String | нет | сумма |
+| currency | String | нет | валюта |
+| text | String | нет | текст |
+
+#### `Right`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| value | String | нет | значение |
+| text | String | нет | текст |
+
+#### `Action`
+| Имя свойства | Тип | Опциональный |Описание|
+| ----------- | ----------- | ----------- |--------|
+| value | String | да | значение |
+| type | String | да | тип |
