@@ -33,16 +33,16 @@ defaultConfig {
 
 ```
 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
-implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1'
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
 
-implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-implementation 'com.google.code.gson:gson:2.8.7'
-implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+implementation 'com.google.code.gson:gson:2.10.1'
+implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-implementation("org.bouncycastle:bcprov-jdk15on:1.65")
-implementation("org.bouncycastle:bcpkix-jdk15on:1.65")
+implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
 ```
 
 Импортирование интерфейсного модуля Rx
@@ -57,11 +57,11 @@ implementation project(':wallet-debug-rx')
 implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.21'
 implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.1'
 
-implementation("com.squareup.okhttp3:okhttp:4.9.1")
-api("com.squareup.okhttp3:logging-interceptor:4.9.1")
+implementation("com.squareup.okhttp3:okhttp:4.12.0")
+api("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-implementation("org.bouncycastle:bcprov-jdk15on:1.65")
-implementation("org.bouncycastle:bcpkix-jdk15on:1.64")
+implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
 ```
 
 # Сценарии использования SDK KD Pay
