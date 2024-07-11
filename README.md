@@ -33,13 +33,13 @@ defaultConfig {
 
 ```
 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
-implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
-implementation 'com.squareup.retrofit2:retrofit:2.11.0'
-implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-implementation 'com.google.code.gson:gson:2.10.1'
-implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+implementation 'com.google.code.gson:gson:2.11.0'
+implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
 implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
 implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
@@ -57,8 +57,8 @@ implementation project(':wallet-debug-rx')
 implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.21'
 implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.1'
 
-implementation("com.squareup.okhttp3:okhttp:4.12.0")
-api("com.squareup.okhttp3:logging-interceptor:4.12.0")
+implementation("com.squareup.okhttp3:okhttp:4.11.0")
+api("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
 implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
 implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
@@ -91,7 +91,7 @@ Wallet.Builder(context)
       .build()
 ```
 
-### Авторизация пользователя в системе KD Pay
+<h3 id="kd_pay_authorization">Авторизация пользователя в системе KD Pay</h3>
 
 Авторизация пользователя проходит в два этапа, для этого необходимо запросить у пользователя
 
@@ -131,7 +131,7 @@ fun confirm(code: String, fcmToken: String, referrerId: String?)) {
 }
 ```
 
-<img src="readme/authorization.jpg"  width="40%">
+<img src="readme/authorization.jpg"  width="40%" alt="authorization.jpg">
 
 ### Ссылки на связанные документы:
 
@@ -141,7 +141,7 @@ https://storage.yandexcloud.net/slyanov-s3/gdpr_consent.html
 Публичная оферта -
 https://storage.yandexcloud.net/slyanov-s3/wallets_public_offer.html
 
-### Публичный ключ для генерации QR-кода
+<h3 id="qr_code_with_public_key">Публичный ключ для генерации QR-кода</h3>
 
 SDK получает публичный ключ и сохраняет его в кеше после авторизации пользователя (метод `confirmCode`). Этот публичный
 ключ хранится в кеше и считается валидным, пока в заголовке любого метода от сервера не
@@ -168,18 +168,18 @@ fun getAccount(cached: Boolean, referrerId: String?, variant: String?) {
 
 В WalletAccountResult в поле bankLinkType приходит тип привязки банков : recurrent/me2me.
 
-<img src="readme/kd_pay.jpg"  width="40%">
+<img src="readme/kd_pay.jpg"  width="40%" alt="kd_pay">
 
 ### Onboarding
 
 В ответе WalletAccountResult приходит поле requiredScreens с массивом форм/экранов, которые можно показать перед
 отображением кошелька, например "need_bank_link"
 
-<img src="readme/onboarding.jpg"  width="40%">
+<img src="readme/onboarding.jpg"  width="40%" alt="onboarding">
 
 ### Привязка банка к кошельку
 
-<img src="readme/banks.jpg"  width="40%">
+<img src="readme/banks.jpg"  width="40%" alt="banks">
 
 Для того чтобы привязать к кошельку пользователя банк, необходимо получить список банков с помощью
 метода `getBanks(bankLinkType: BankLinkType?)`.
@@ -274,7 +274,7 @@ fun addNewBank(bankId: Int, fundingSum: String?, bankLinkType: BankLinkType?) {
 В случае если поле равно `true`, значит процесс привязки банка успешен. В случае если в списке банков нет искомого,
 то это означает что произошла ошибка при привязке банка.
 
-<img src="readme/my_banks.jpg"  width="40%">
+<img src="readme/my_banks.jpg"  width="40%" alt="my_banks">
 
 Если в методе `getAccount` возвращается bankLinkType - recurrent,
 то список привязанных банков находится в массиве recurrentBanks, если me2me, то в account в поле banks
@@ -311,7 +311,7 @@ fun addNewBank(bankId: Int, fundingSum: String?, bankLinkType: BankLinkType?) {
 | ErrorMessage.Client.NotAuthorized() | Сессия отсутствует или устарела                                           |
 | ErrorMessage.Client.Authorization() | Отсутствует идентификатор пользователя в системе. Необходима авторизация. |
 
-<img src="readme/bank_methods.jpg"  width="40%">
+<img src="readme/bank_methods.jpg"  width="40%" alt="bank_methods">
 
 ### Удаление привязанного банка (неактуально для рекуррентов)
 
@@ -333,7 +333,7 @@ fun addNewBank(bankId: Int, fundingSum: String?, bankLinkType: BankLinkType?) {
 | ErrorMessage.Client.Authorization() | Отсутствует идентификатор пользователя в системе. Необходима авторизация. |
 | ErrorMessage.Client.NoAccount()     | Нет аккаунта пользователя                                                 |
 
-### Генерация QR кода
+<h3 id="generate_qr_string">Генерация QR кода</h3>
 
 Для быстрого создания строки, кодируемой в qr-код, достаточно использовать метод `generateQrString(loyaltyId: String)`.
 Метод не требует наличия интернета, если есть предзагруженные otp-коды.
@@ -473,7 +473,7 @@ fun generateQrString(loyaltyId: String) {
 |---------|--------------|--------------------------------|
 | Profile | Нет          | Данные по профилю пользователя |
 
-<img src="readme/profile.jpg"  width="40%">
+<img src="readme/profile.jpg"  width="40%" alt="profile">
 
 ##### Получение данных профиля пользователя (детализация).
 
@@ -502,7 +502,7 @@ fun generateQrString(loyaltyId: String) {
 |---------------|--------------|------------------|
 | List<FaqItem> | нет          | Список элементов |
 
-### Выход пользователя из KD pay.
+<h3 id="logout">Выход пользователя из KD pay.</h3>
 
 Для выполнения выхода пользователя из системы KD pay необходимо использовать метод `logout()`, при этом выполняется
 полная очистка кеша sdk. Удаляются идентификаторы сессии, пользователя, публичный ключ сервера, отп коды и номер
@@ -510,7 +510,7 @@ fun generateQrString(loyaltyId: String) {
 
 ### Получение информации о кешбэке и истории операций.
 
-<img src="readme/operation_history.jpg"  width="40%">
+<img src="readme/operation_history.jpg"  width="40%" alt="operation_history">
 
 ### Получение информации о кешбэке.
 
@@ -750,6 +750,37 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 }
 ```
 
+## Взаимодействие со сгенерированными ключами в рамках SDK
+
+#### При вызове метода [confirmCode()](#kd_pay_authorization)
+
+* Первый раз генерируются privateKey и publicKey клиента
+* Сгенерированный publicKey отправляется на сервер
+* В ответе с сервера приходят serverPublicKey и serverPublicKeyId
+* Клиент расшифровывает serverPublicKey и сохраняет ключ и id
+
+#### В случае когда header ответа запросов на сервер содержит Need-Update-Server-key=true (см. [тут](#qr_code_with_public_key))
+
+* Вызов серверного метода @GET(“server/public_key”)
+* В ответе с сервера приходят serverPublicKey и serverPublicKeyId
+* Клиент расшифровывает serverPublicKey и сохраняет ключ и id
+
+#### При вызове [updateClientPublicKey()](#update_client_public_key):
+
+* Генерируются privateKey и publicKey клиента
+* Сгенерированный publicKey отправляется на сервер
+
+#### При вызове [generateQRString()](#generate_qr_string):
+
+* Получение otp кодов с сервера, если требуются
+* Шифрование otp кода с помощью serverPublicKey
+* Проверка просрочен ли publicKey клиента (если да - вызов его обновления)
+* Подписание зашифрованного otp кода с помощью publicKey клиента
+
+#### При вызове [logout()](#logout):
+
+* Очистка всех хранящихся ключей
+
 ## Дополнительные методы для взаимодействия с сервисом KD pay
 
 #### Метод для проверки состояния сервиса.
@@ -776,7 +807,7 @@ fun sendFormDraft(type: String, formId: Int?, version: Int?, draftFields: Map<In
 |---------|--------------|-------------------------------------------|
 | Boolean | Нет          | true - ключ истек , false - ключ не истек |
 
-##### Обновить клиентские ключи и отправить публичный ключ на сервер.
+<h3 id="update_client_public_key">Обновить клиентские ключи и отправить публичный ключ на сервер.</h3>
 
 `fun updateClientPublicKey(deviceId: String)`
 
